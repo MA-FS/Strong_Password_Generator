@@ -15,7 +15,7 @@ const specialCharCodes = arrayFromLowToHigh(33, 47).concat(
 // Function to create arrays from character sets
 function arrayFromLowToHigh(low, high) {
   const array = []
-  for (let i = low; i <= high; i++){
+  for (let i = low; i <= high; i++) {
     array.push(i)
   }
   return array
@@ -80,6 +80,15 @@ function getPasswordOptions() {
   return passwordOptions;
 }
 
+// Function for selecting a random array element
+function getRandom(array) {
+  var randId = Math.floor(Math.random() * array.length);
+  var randElement = array[randId];
+
+  return randElement;
+}
+
+
 // Function to generate password depending on user options
 function generatePassword() {
   var options = getPasswordOptions();
@@ -88,21 +97,47 @@ function generatePassword() {
   if (!options) 
   return null;
   
-  // Create an array that contains possible character codes depending on user selection
+  // Create arrays that contain possible character codes, required character codes, and the final password depending on user selection.
   let possibleCharacters = [];
-  if (options.hasLowerCaseCharacters) possibleCharacters = possibleCharacters.concat(lowerCaseCharCodes)
-  if (options.hasUpperCaseCharacters) possibleCharacters = possibleCharacters.concat(upperCaseCharCodes)
-  if (options.hasNumericCharacters) possibleCharacters = possibleCharacters.concat(numericCharCodes)
-  if (options.hasSpecialCharacters) possibleCharacters = possibleCharacters.concat(specialCharCodes)
-    
-  // Choose random character codes from the list of possible characters and convert them to their relevent ASCII characters for the user length required
-  const passwordCharacters = []
-  for (let i = 0; i < options.length; i++) {
-    const characterCode = possibleCharacters[Math.floor(Math.random() * possibleCharacters.length)]
-    passwordCharacters.push(String.fromCharCode(characterCode))
+  let requiredCharacters = [];
+  let finalPasswordCharacters = [];
+  let finalPassword = [];
+
+  if (options.hasLowerCaseCharacters) {
+    possibleCharacters = possibleCharacters.concat(lowerCaseCharCodes);
+    requiredCharacters.push(getRandom(lowerCaseCharCodes));
   }
+  if (options.hasUpperCaseCharacters) {
+    possibleCharacters = possibleCharacters.concat(upperCaseCharCodes);
+    requiredCharacters.push(getRandom(upperCaseCharCodes));
+  }
+  if (options.hasNumericCharacters) {
+    possibleCharacters = possibleCharacters.concat(numericCharCodes);
+    requiredCharacters.push(getRandom(numericCharCodes));
+  }
+  if (options.hasSpecialCharacters) {
+    possibleCharacters = possibleCharacters.concat(specialCharCodes);
+    requiredCharacters.push(getRandom(specialCharCodes));
+  }
+
+  // Create loop to assign random possible characters to the final password character array
+  for (var i = 0; i < options.length; i++) {
+    var passwordCharacters = getRandom(possibleCharacters);
+    finalPasswordCharacters.push(passwordCharacters);
+  } 
+
+  // Add the required characters into the final password depending on length of the requiredCharacters
+  for (var i = 0; i < requiredCharacters.length; i++) {
+    finalPasswordCharacters[i] = requiredCharacters[i];
+  }
+
+  // Randomize the finalPasswordCharacters array elements and convert to their respective ASCII characters
+  finalPasswordCharacters = finalPasswordCharacters.sort(() => Math.random() - 0.5);
   
-  return passwordCharacters.join('')
+  finalPassword.push(String.fromCharCode.apply(null, finalPasswordCharacters));
+  
+  // Convert final password from an array to a string
+  return finalPassword.join('')
     
 }
 
