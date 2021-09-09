@@ -17,7 +17,7 @@ Functions include;
 *   Depending on user selection, force one type of character to be included in the final password.
 *   Display the final password result on the page
 
-### ***Result**
+### **Result**
 
 ![Generated Password](https://github.com/MA-FS/Strong_Password_Generator/blob/main/assets/images/password_result.png?raw=true)
 
